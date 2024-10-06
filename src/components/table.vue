@@ -36,15 +36,15 @@
 
         <footer>
             <ul class="pagination justify-content-center">
-                <button type="button" class="btn btn-outline-primary p-2 m-1" @click="decrement()"> &larr;</button>
-                <button type="button" class="btn btn-outline-primary p-2 m-1" @click="increment()"> &rarr;</button>
+                <button type="button" class="btn btn-outline-primary p-2 m-1 btn-lg" @click="decrement()"> &larr; less</button>
+                <button type="button" class="btn btn-outline-primary p-2 m-1 btn-lg" @click="increment()"> more &rarr;</button>
             </ul>
         </footer>
     </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref } from 'vue';
+import { defineProps, ref } from 'vue'
 
 defineProps({
     data: {
@@ -55,27 +55,27 @@ defineProps({
         type: Array,
         required: true
     }
-});
+})
 defineEmits([
     'DeleteUser',
     'EditUser'
-]);
+])
 
-let first = ref(0);
-let end = ref(10);
+let first = ref(0)
+let end = ref(10)
 
 const increment = () => {
     if (end.value <= 990) {
-        first.value += 10;
-        end.value += 10;
+        first.value += 10
+        end.value += 10
     }
-};
+}
 const decrement = () => {
     if (first.value >= 10) {
-        first.value -= 10;
-        end.value -= 10;
+        first.value -= 10
+        end.value -= 10
     }
-};
+}
 </script>
 
 <style scoped>

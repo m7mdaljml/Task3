@@ -13,7 +13,12 @@
                 </select>
             </div>
             <div class="col-md-4">
-                <input v-model="text" type="text" class="form-control" placeholder="Search record" @input="$emit('onInput',text)">
+                <div class="input-group mb-4">
+                    <select class="form-select" v-model="key">
+                        <option v-for="(key, index) in schema" :key="index" :selected="key == 'id'">{{ key }}</option>
+                    </select>
+                    <input v-model="text" type="text" class="form-control" placeholder="Search record" @input="$emit('onInput',text,key)">
+                </div>
             </div>
             <!--<div class="col-md-3">
                 <div>
@@ -27,15 +32,25 @@
 </template>
 <script setup>
 import logo from '@/assets/logo.png'
-import {ref} from 'vue'
+import { ref } from 'vue'
 const text = ref('')
+const key = ref('')
 const emit = defineEmits([
     'onSelect',
     'onInput'
 ])
+defineProps({
+    schema: {
+        type: Array,
+        required: true
+    }
+})
 </script>
 <style scoped>
 .col-md-3 {
     align-content: center;
+}
+.form-control{
+    width:40%;
 }
 </style>

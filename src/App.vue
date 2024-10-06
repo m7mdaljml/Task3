@@ -1,14 +1,13 @@
 <template>
-  <v-navbar @onSelect="ChangeData" @onInput="SelectUser" />
+  <v-navbar :schema="schema" @onSelect="ChangeData" @onInput="SelectUser" />
   <v-table :data="SearchResult" :schema="schema" @DeleteUser="deleteResult" @EditUser="editResult" />
-
   <div v-if="Flag" class="modal-overlay">
     <div class="modal-content">
       <h3>Edit Record</h3>
-      <form @submit.prevent="saveEdit">
-        <div v-for="(value, key) in editedItem" :key="key">
+      <form @submit.prevent="SaveFun">
+        <div v-for="(item,key) in NewItem" :key="key">
           <label>{{ key }}:</label>
-          <input v-model="editedItem[key]" :disabled="key === 'id'"/>
+          <input v-model="NewItem[key]" :disabled="key === 'id'"/>
         </div>
         <button type="submit" class="btn btn-primary mt-3 p-2 m-1">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-floppy"
@@ -45,8 +44,9 @@ const EmpSchema = ref(['id', 'first_name', 'last_name', 'email', 'gender', 'ip_a
 const data = ref([])
 const schema = ref([])
 const SearchValue = ref('')
+const SearchKey = ref('')
 const Flag = ref(false)
-const editedItem = ref({})
+const NewItem = ref({})
 
 const GetData = async () => {
   try {
@@ -72,17 +72,24 @@ const ChangeData = (obj) => {
   }
 }
 
-const SelectUser = (text) => {
-  SearchValue.value = text.toLowerCase();
+const SelectUser = (text,key) => {
+  SearchValue.value = text.toLowerCase()
+  if(!key)
+  SearchKey.value = 'id'
+  else
+  SearchKey.value = key
 }
 
 const SearchResult = computed(() => {
   if (!SearchValue.value) {
     return data.value
   }
-  return data.value.filter((item) =>
-    Object.keys(item).some((key) => String(item[key]).toLowerCase().includes(SearchValue.value))
-  )
+  else{
+    return data.value.filter(item =>
+      String(item[SearchKey.value]).toLowerCase().includes(SearchValue.value)
+    )
+  }
+  
 })
 
 const deleteResult = (id) => {
@@ -90,19 +97,15 @@ const deleteResult = (id) => {
 }
 
 const editResult = (id) => {
-  const itemToEdit = data.value.find(item => item.id === id)
-  if (itemToEdit) {
-    editedItem.value = { ...itemToEdit }
+  const CurrItem = data.value.find(item => item.id === id)
+    NewItem.value = { ...CurrItem }
     Flag.value = true
-  }
 }
 
-const saveEdit = () => {
-  const index = data.value.findIndex(item => item.id === editedItem.value.id)
-  if (index !== -1) {
-    data.value[index] = { ...editedItem.value }
-  }
-  Flag.value = false
+const SaveFun = () => {
+  const index = data.value.findIndex(item => item.id === NewItem.value.id)
+    data.value[index] = { ...NewItem.value }
+    Flag.value = false
 }
 
 
