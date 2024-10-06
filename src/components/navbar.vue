@@ -14,27 +14,15 @@
             </div>
             <div class="col-md-4">
                 <div class="input-group mb-4">
-                    <select class="form-select" v-model="key">
-                        <option v-for="(key, index) in schema" :key="index" :selected="key == 'id'">{{ key }}</option>
-                    </select>
-                    <input v-model="text" type="text" class="form-control" placeholder="Search record" @input="$emit('onInput',text,key)">
+                    <input type="text" class="form-control" placeholder="Search record">
                 </div>
             </div>
-            <!--<div class="col-md-3">
-                <div>
-                    <button class="btn btn-outline-primary m-1">Export</button>
-                    <button class="btn btn-outline-secondary">Import</button>
-                </div>
-            </div>-->
         </div>
-
     </div>
 </template>
 <script setup>
 import logo from '@/assets/logo.png'
 import { ref } from 'vue'
-const text = ref('')
-const key = ref('')
 const emit = defineEmits([
     'onSelect',
     'onInput'
