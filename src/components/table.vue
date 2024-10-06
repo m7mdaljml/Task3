@@ -36,7 +36,7 @@
 
         <ul class="pagination justify-content-center">
             <li class="page-item" :disabled="end < 10">
-                <span class="page-link" @click="decrement()">Previous</span>
+                <span class="page-link" @click="decrement()" >Previous</span>
             </li>
             <li class="page-item" v-if="PrevPage != 0"><a class="page-link">{{ PrevPage }}</a></li>
             <li class="page-item active" aria-current="page">
@@ -44,7 +44,7 @@
             </li>
             <li class="page-item" ><a class="page-link" >{{ NextPage }}</a></li>
             <li class="page-item">
-                <a class="page-link" @click="increment()">Next</a>
+                <a class="page-link" @click="increment()" >Next</a>
             </li>
         </ul>
     </div>
