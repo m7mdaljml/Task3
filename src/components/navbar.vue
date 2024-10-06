@@ -1,5 +1,4 @@
 <template>
-
     <div class="container-fluid" style="background-color: lightgray;padding:10px;">
         <div class="row mb-3">
             <div class="col-md-4">
@@ -25,7 +24,6 @@ import logo from '@/assets/logo.png'
 import { ref } from 'vue'
 const emit = defineEmits([
     'onSelect',
-    'onInput'
 ])
 defineProps({
     schema: {
