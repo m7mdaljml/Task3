@@ -13,7 +13,7 @@
             </div>
             <div class="col-md-4">
                 <div class="input-group mb-4">
-                    <input type="text" class="form-control" placeholder="Search record">
+                    <input  type="text" class="form-control" placeholder="Search record" >
                 </div>
             </div>
         </div>
@@ -22,8 +22,9 @@
 <script setup>
 import logo from '@/assets/logo.png'
 import { ref } from 'vue'
+
 const emit = defineEmits([
-    'onSelect',
+    'onSelect'
 ])
 defineProps({
     schema: {
@@ -31,6 +32,7 @@ defineProps({
         required: true
     }
 })
+
 </script>
 <style scoped>
 .col-md-3 {

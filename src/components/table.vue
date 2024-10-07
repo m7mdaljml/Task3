@@ -4,14 +4,19 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        
+                        <th><input type="checkbox" @change="ToggleFlag()" :checked="arr.length==10"></th>
+                        <th><select class="form-select form-select-sm" @change="SelectChange($event)">
+                                <option value="Empty" Selected>Select</option>
+                                <option value="delete">delete</option>
+                            </select></th>
                         <th v-for="(key, index) in schema" :key="index">{{ key }}</th>
                         <th colspan="2">Action</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="item in data.slice(first, end)" :key="item.id">
-                        
+                        <td colspan="2"><input type="checkbox" :checked="arr.includes(item.id)" :value="item.id"
+                                @change="ManageArr(item.id)"></td>
                         <td v-for="(key, index) in schema" :key="index">{{ item[key] }}</td>
                         <td>
                             <button class="btn btn-outline-secondary btn-sm me-2">
@@ -35,7 +40,7 @@
                 </tbody>
             </table>
         </div>
-          
+        
         <template v-if="props.data.length > 10">
             <ul class="pagination justify-content-center gap-2">
                 <li class="page-item" v-if="PrevPage > 0">
@@ -87,7 +92,38 @@ const props = defineProps({
         required: true
     }
 })
-
+const emit = defineEmits(['Delete'])
+const arr = ref([])
+const ToggleFlag = () => {
+    Flag.value = !Flag.value
+    if (Flag.value) {
+        for (let i = first.value; i < end.value; i++) {
+            arr.value.push(props.data[i].id)
+        }
+    }
+    else {
+        arr.value = []
+    }
+}
+const EmptyArr = ()=>{
+arr.value = []
+}
+const ManageArr = (checked) => {
+    if (!arr.value.includes(checked)) {
+        arr.value.push(checked)
+    } else {
+        const index = arr.value.indexOf(checked)
+        arr.value.splice(index, 1)
+    }
+}
+const SelectChange= (event)=> {
+        const selectedValue = event.target.value
+        if (selectedValue === 'delete') {
+            emit('Delete', arr.value)
+            EmptyArr()
+            event.target.value = 'Empty'
+        }
+    }
 
 const increment = (key) => {
     if (end.value <= props.data.length - 10) {
