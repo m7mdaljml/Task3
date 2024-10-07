@@ -16,8 +16,7 @@ const Employees = ref([])
 const EmpSchema = ref(['id', 'first_name', 'last_name', 'email', 'gender', 'ip_address'])
 const data = ref([])
 const schema = ref([])
-const SearchValue = ref('')
-const SearchKey = ref('')
+const name = 0
 
 const GetData = async () => {
   try {
