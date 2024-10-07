@@ -1,6 +1,6 @@
 <template>
   <v-navbar @onSelect="ChangeData"/>
-  <v-table :data="data" :schema="schema" @Delete="DeleteItems"/>
+  <v-table :data="data" :schema="schema" />
   
 </template>
 
@@ -40,9 +40,7 @@ const ChangeData = (obj) => {
     schema.value = CarSchema.value
   }
 }
-const DeleteItems = (arr) => {
-  data.value = data.value.filter((item) => !arr.includes(item.id));
-}
+
 
 onMounted(async () => {
   await GetData()

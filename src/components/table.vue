@@ -35,7 +35,7 @@
                 </tbody>
             </table>
         </div>
-        
+          
         <template v-if="props.data.length > 10">
             <ul class="pagination justify-content-center gap-2">
                 <li class="page-item" v-if="PrevPage > 0">
