@@ -1,7 +1,7 @@
 <template>
   <v-navbar :schema="schema" @onSelect="ChangeData"/>
-  <v-table :data="data" :schema="schema" @Delete="DeleteSelected"/>
-  
+  <v-table :data="data" :schema="schema"/>
+  <table></table>
 </template>
 
 <script setup lang="ts">
@@ -16,7 +16,6 @@ const Employees = ref([])
 const EmpSchema = ref(['id', 'first_name', 'last_name', 'email', 'gender', 'ip_address'])
 const data = ref([])
 const schema = ref([])
-const name = 0
 
 const GetData = async () => {
   try {
@@ -41,17 +40,6 @@ const ChangeData = (obj) => {
     schema.value = CarSchema.value
   }
 }
-const DeleteSelected = (arr) => {
-  if(arr.length > 0){
-    const confirmVal = confirm("Are you sure to delete selected Items ?")
-    if(confirmVal){
-      data.value = data.value.filter((item) => !arr.includes(item.id));
-    }
-  }
-}
-
-
-
 onMounted(async () => {
   await GetData()
 })

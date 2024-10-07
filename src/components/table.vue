@@ -4,19 +4,13 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th><input type="checkbox" @change="ToggleFlag()" :checked="arr.length==10"></th>
-                        <th><select class="form-select form-select-sm" @change="SelectChange($event)">
-                                <option value="Empty" Selected>Select</option>
-                                <option value="delete">delete</option>
-                            </select></th>
                         <th v-for="(key, index) in schema" :key="index">{{ key }}</th>
                         <th colspan="2">Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="item in data.slice(first, end)" :key="item.id">
-                        <td colspan="2"><input type="checkbox" :checked="arr.includes(item.id)" :value="item.id"
-                                @change="ManageArr(item.id)"></td>
+                    <tr v-for="item in data" :key="item.id">
+                       
                         <td v-for="(key, index) in schema" :key="index">{{ item[key] }}</td>
                         <td>
                             <button class="btn btn-outline-secondary btn-sm me-2">
@@ -40,48 +34,12 @@
                 </tbody>
             </table>
         </div>
-        
-        <template v-if="props.data.length > 10">
-            <ul class="pagination justify-content-center gap-2">
-                <li class="page-item" v-if="PrevPage > 0">
-                    <span class="page-link" @click="First()">First</span>
-                </li>
-                <li class="page-item" v-if="PrevPage > 0">
-                    <span class="page-link" @click="decrement(1)">Prev</span>
-                </li>
-                <template v-for="i in [...Array(Math.floor(numOfPagination / 2)).keys()].reverse()" :key="i">
-                <li class="page-item" @click="decrement(i+1)" v-if="(PrevPage - (i))>0">
-                    <a class="page-link">{{ PrevPage - (i) }}</a>
-                </li>
-                </template>
-                <li class="page-item-active">
-                    <span class="page-link">{{ CurrPage }}</span> 
-                </li>
-                <template v-for="i in Math.floor(numOfPagination / 2)-1" :key="i">
-                <li class="page-item" @click="increment(i)" v-if="NextPage + 1 <= 100-i+2">
-                    <a class="page-link">{{ NextPage+(i-1) }}</a>
-                </li>
-                </template>
-                <li class="page-item" v-if="NextPage  <= 100">
-                    <a class="page-link" @click="increment(1)" v-if="NextPage <= 100">Next</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" @click="Last()" v-if="NextPage <= 100">Last</a>
-                </li>
-            </ul>
-        </template>
     </div>
 </template>
 
 <script setup lang="ts">
 import { defineProps, ref, computed } from 'vue'
-const PrevPage = ref(0)
-const CurrPage = ref(1)
-const NextPage = ref(2)
-const first = ref(0)
-const end = ref(10)
-const numOfPagination = ref(10)
-const Flag = ref(false)
+
 const props = defineProps({
     data: {
         type: Array,
@@ -92,102 +50,10 @@ const props = defineProps({
         required: true
     }
 })
-const emit = defineEmits(['Delete'])
-const arr = ref([])
-const ToggleFlag = () => {
-    Flag.value = !Flag.value
-    if (Flag.value) {
-        for (let i = first.value; i < end.value; i++) {
-            arr.value.push(props.data[i].id)
-        }
-    }
-    else {
-        arr.value = []
-    }
-}
-const EmptyArr = ()=>{
-arr.value = []
-}
-const ManageArr = (checked) => {
-    if (!arr.value.includes(checked)) {
-        arr.value.push(checked)
-    } else {
-        const index = arr.value.indexOf(checked)
-        arr.value.splice(index, 1)
-    }
-}
-const SelectChange= (event)=> {
-        const selectedValue = event.target.value
-        if (selectedValue === 'delete') {
-            emit('Delete', arr.value)
-            EmptyArr()
-            event.target.value = 'Empty'
-        }
-    }
-
-const increment = (key) => {
-    if (end.value <= props.data.length - 10) {
-        first.value += 10 * key
-        end.value += 10 * key
-        PrevPage.value += key
-        CurrPage.value += key
-        NextPage.value += key
-
-    }
-}
-const decrement = (key) => {
-    if (first.value >= 10) {
-        first.value -= 10 * key
-        end.value -= 10 * key
-        PrevPage.value -= key
-        CurrPage.value -= key
-        NextPage.value -= key
-    }
-}
-const First = () => {
-    first.value = 0
-    end.value = 10
-    PrevPage.value = 0
-    CurrPage.value = 1
-    NextPage.value = 2
-}
-const Last = () => {
-    first.value = props.data.length - 10
-    end.value = props.data.length
-    PrevPage.value = Math.floor((props.data.length / 10) - 1)
-    CurrPage.value = Math.floor((props.data.length) / 10)
-    NextPage.value = Math.floor((props.data.length) / 10 + 1)
-}
 </script>
 
 <style scoped>
-li a,
-span {
-    background-color: rgba(0, 0, 0, 0.329);
-    color: black;
-}
-
-.page-item-active span {
-    background-color: rgb(0, 0, 0);
-    color: white;
-}
-
-.page-item-active span:hover,
-li a:hover,
-span:hover {
-    background-color: white;
-    border: 1px solid black;
-    color: black;
-    user-select: none;
-}
-
 .table {
     border: 1px solid lightgray;
-}
-
-a,
-span {
-    border-radius: 50%;
-    cursor: pointer;
 }
 </style>
